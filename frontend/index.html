@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arcaea Launcher</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Initial Loading Splash -->
+    <div class="loading-splash" id="loadingSplash">
+        <div class="splash-content">
+            <h1 class="splash-logo">Arcaea</h1>
+            <div class="splash-loader">
+                <div class="loader-line"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <!-- Haunted Background -->
+        <div class="bg-wrapper">
+            <video autoplay loop muted playsinline class="bg-image">
+                <source src="bg.webm" type="video/webm">
+            </video>
+            <div class="bg-dim"></div>
+            <div class="noise"></div>
+        </div>
+
+        <!-- Clean Window Bar -->
+        <header class="app-header" style="--wails-draggable:drag">
+            <div class="header-brand">
+                <!-- Removed Title Text -->
+            </div>
+            
+            <div class="header-controls" style="--wails-draggable:no-drag">
+                <div class="window-controls">
+                    <button class="ctrl-btn" id="btnMinimize">
+                        <svg width="12" height="12" viewBox="0 0 24 24"><path d="M19 13H5v-2h14v2z" fill="currentColor"/></svg>
+                    </button>
+                    <button class="ctrl-btn" id="btnMaximize">
+                        <svg width="12" height="12" viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" fill="currentColor"/></svg>
+                    </button>
+                    <button class="ctrl-btn ctrl-close" id="btnClose">
+                        <svg width="12" height="12" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="currentColor"/></svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Layout: Sidebar + Content -->
+        <div class="layout-wrapper" style="--wails-draggable:no-drag">
+
+            <!-- ── Sidebar ── -->
+            <nav class="sidebar">
+                <div class="sidebar-logo-wrap">
+                    <img src="aegleseeker.png" alt="Aegleseeker" class="sidebar-logo"/>
+                </div>
+
+                <ul class="sidebar-nav">
+                    <li>
+                        <button class="sidebar-nav-item active" id="navHome" data-page="home">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                            <span data-i18n="nav_home">Home</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="sidebar-nav-item" id="navTextures" data-page="textures">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                            <span data-i18n="nav_textures">Texture Packs</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="sidebar-nav-item" id="navSettings" data-page="settings">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2"/></svg>
+                            <span data-i18n="nav_settings">Settings</span>
+                        </button>
+                    </li>
+                </ul>
+
+
+            </nav>
+
+            <!-- ── Page Content ── -->
+            <main class="page-content">
+
+                <!-- HOME page -->
+                <div class="page active" id="page-home">
+                    <div class="home-inner">
+                        <div class="player-card-wrapper">
+                            <div class="player-card">
+                                <div class="card-content-row">
+                                    <!-- Left: Skin -->
+                                    <div class="skin-section">
+                                        <div class="skin-container" id="skinContainer">
+                                            <!-- 3D render goes here -->
+                                        </div>
+                                    </div>
+
+                                    <!-- Right: Info & Actions -->
+                                    <div class="info-section">
+                                        <div class="user-header">
+                                            <h2 class="player-name-display" id="playerNameDisplay">Player</h2>
+                                        </div>
+
+                                        <div class="actions-group">
+                                            <button class="btn-launch-laby" id="btnLaunch" disabled>
+                                                <div class="launch-icon-wrapper">
+                                                    <svg class="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+                                                </div>
+                                                <div class="launch-text-col">
+                                                    <span class="launch-title" data-i18n="btn_enter">Inject</span>
+                                                    <span class="launch-subtitle" data-i18n="btn_enter_sub">Start &amp; Inject</span>
+                                                </div>
+                                            </button>
+
+                                            <button class="btn-kill-laby" id="btnKill" style="display:none;">
+                                                <div class="launch-icon-wrapper">
+                                                    <svg class="kill-icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="currentColor"/></svg>
+                                                </div>
+                                                <div class="launch-text-col">
+                                                    <span class="launch-title" data-i18n="btn_kill">Kill</span>
+                                                    <span class="launch-subtitle" data-i18n="btn_kill_sub">Terminate Minecraft</span>
+                                                </div>
+                                            </button>
+
+                                            <button class="btn-kill-laby" id="btnCancelLaunch" style="display:none;">
+                                                <div class="launch-icon-wrapper">
+                                                    <svg class="kill-icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="currentColor"/></svg>
+                                                </div>
+                                                <div class="launch-text-col">
+                                                    <span class="launch-title" data-i18n="btn_cancel">Cancel</span>
+                                                    <span class="launch-subtitle"> </span>
+                                                </div>
+                                            </button>
+
+                                            <div class="orchestration-area" id="progressContainer" style="display: none;">
+                                                <div class="orchestration-bar">
+                                                    <div class="orchestration-fill" id="progressFill"></div>
+                                                </div>
+                                                <span class="orchestration-label" id="progressText">Starting...</span>
+                                            </div>
+                                            <div class="status-message" id="statusMessage"></div>
+                                            <div class="status-row" id="statusRow">
+                                                <div class="status-dot" id="statusDot"></div>
+                                                <span class="status-text" id="versionText" data-i18n="status_ready">Ready</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TEXTURE PACKS page -->
+                <div class="page" id="page-textures">
+                    <div class="page-header">
+                        <h1 class="page-title" data-i18n="nav_textures">Texture Packs</h1>
+                        <p class="page-subtitle" data-i18n="textures_subtitle">Customize your Minecraft experience.</p>
+                    </div>
+                    <div class="coming-soon-wrap">
+                        <div class="coming-soon-card">
+                            <div class="coming-soon-icon">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                            </div>
+                            <h2 class="coming-soon-title" data-i18n="coming_soon_title">Coming Soon</h2>
+                            <p class="coming-soon-desc" data-i18n="coming_soon_desc">Texture pack management is on the way. Stay tuned for updates.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SETTINGS page -->
+                <div class="page" id="page-settings">
+                    <div class="settings-layout">
+                        <!-- Settings Sidebar Tabs -->
+                        <div class="settings-sidebar">
+                            <div class="page-header" style="margin-bottom: 16px;">
+                                <h1 class="page-title" data-i18n="nav_settings">Settings</h1>
+                            </div>
+                            <ul class="settings-nav">
+                                <li>
+                                    <button class="settings-nav-item active" data-stab="general">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                                        <span data-i18n="settings_general">General</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="settings-nav-item" data-stab="advanced">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                                        <span data-i18n="settings_advanced">Advanced</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Settings Content -->
+                        <div class="settings-content-area">
+
+                            <!-- General Tab -->
+                            <div class="stab-content active" id="stab-general">
+                                <div class="settings-section">
+                                    <h3 class="settings-section-title" data-i18n="settings_language">Language</h3>
+                                    <div class="settings-card">
+                                        <div class="field">
+                                            <div class="field-row">
+                                                <div class="custom-select" id="languageSelect">
+                                                    <div class="select-selected">
+                                                        <span class="select-content">
+                                                            <svg width="16" height="12" viewBox="0 0 16 12"><rect width="16" height="12" fill="#AA151B"/><rect y="3" width="16" height="6" fill="#F1BF00"/></svg>
+                                                            <span>Español</span>
+                                                        </span>
+                                                        <svg class="select-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                                    </div>
+                                                    <div class="select-items select-hide">
+                                                        <div data-value="es">
+                                                            <svg width="16" height="12" viewBox="0 0 16 12"><rect width="16" height="12" fill="#AA151B"/><rect y="3" width="16" height="6" fill="#F1BF00"/></svg>
+                                                            <span>Español</span>
+                                                        </div>
+                                                        <div data-value="en">
+                                                            <svg width="16" height="12" viewBox="0 0 16 12"><rect width="16" height="12" fill="#B22234"/><rect y="1.5" width="16" height="1.5" fill="#FFF"/><rect y="4.5" width="16" height="1.5" fill="#FFF"/><rect y="7.5" width="16" height="1.5" fill="#FFF"/><rect y="10.5" width="16" height="1.5" fill="#FFF"/><rect width="7" height="6.5" fill="#3C3B6E"/></svg>
+                                                            <span>English</span>
+                                                        </div>
+                                                        <div data-value="pt">
+                                                            <svg width="16" height="12" viewBox="0 0 16 12"><rect width="16" height="12" fill="#009C3B"/><polygon points="8,1 15,6 8,11 1,6" fill="#FFDF00"/><circle cx="8" cy="6" r="2.5" fill="#002776"/></svg>
+                                                            <span>Português (Brasil)</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="settings-section">
+                                    <h3 class="settings-section-title" data-i18n="settings_injection">Injection</h3>
+                                    <div class="settings-card">
+                                        <div class="setting-item">
+                                            <div class="setting-info">
+                                                <span class="setting-label" data-i18n="settings_auto_inject">Auto Inject</span>
+                                                <span class="setting-desc" data-i18n="settings_auto_inject_desc">Automatically inject when Minecraft launches.</span>
+                                            </div>
+                                            <div class="toggle-switch">
+                                                <input type="checkbox" id="autoInjectToggle">
+                                                <span class="toggle-slider"></span>
+                                            </div>
+                                        </div>
+                                        <div id="autoInjectOptions" class="expandable-section">
+                                            <div class="setting-item" style="margin-top: 15px;">
+                                                <span class="setting-label" data-i18n="settings_cooldown">Injection Cooldown (s)</span>
+                                                <input type="number" id="injectCooldown" value="10" min="1" max="60" style="width: 60px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: white; padding: 5px; border-radius: 4px; text-align: center;">
+                                            </div>
+                                            <p class="field-info" data-i18n="settings_cooldown_warn" style="color: #ffcc00; font-size: 0.85em; line-height: 1.4; margin-top: 10px; border-left: 2px solid #ffcc00; padding-left: 10px;">
+                                                Not recommended for slower PCs, only use if your pc loads the game faster than 10 seconds, or set a custom cooldown matching your PC's loading speed to ensure stability.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="settings-section">
+                                    <h3 class="settings-section-title" data-i18n="settings_payload">Injected Payload</h3>
+                                    <div class="settings-card">
+                                        <div class="field">
+                                            <div class="field-row">
+                                                <input type="text" id="customDllPath" placeholder="Default Aegleseeker DLL" readonly>
+                                                <button class="field-btn" id="btnBrowse" data-i18n="settings_browse">Browse</button>
+                                            </div>
+                                            <p class="field-info" data-i18n="settings_payload_info">Select a custom DLL to inject into Minecraft.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="settings-section">
+                                    <h3 class="settings-section-title" data-i18n="settings_behavior">Behavior</h3>
+                                    <div class="settings-card">
+                                        <div class="setting-item">
+                                            <div class="setting-info">
+                                                <span class="setting-label" data-i18n="settings_enable_bg">Enable Background Video</span>
+                                            </div>
+                                            <div class="toggle-switch">
+                                                <input type="checkbox" id="enableBackgroundToggle" checked>
+                                                <span class="toggle-slider"></span>
+                                            </div>
+                                        </div>
+                                        <div class="setting-divider"></div>
+                                        <div class="setting-item">
+                                            <div class="setting-info">
+                                                <span class="setting-label" data-i18n="settings_close_inject">Close on Inject</span>
+                                            </div>
+                                            <div class="toggle-switch">
+                                                <input type="checkbox" id="closeOnInjectToggle">
+                                                <span class="toggle-slider"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="settings-footer">
+                                    <button class="btn-primary" id="btnSaveSettings" data-i18n="settings_save">Save Changes</button>
+                                    <button class="btn-ghost" id="btnResetSettings" data-i18n="settings_reset">Reset to Default</button>
+                                </div>
+                            </div>
+
+                            <!-- Advanced Tab -->
+                            <div class="stab-content" id="stab-advanced">
+                                <div class="settings-section">
+                                    <h3 class="settings-section-title" data-i18n="settings_debug">Debug &amp; Development</h3>
+                                    <div class="settings-card">
+                                        <div class="setting-item">
+                                            <div class="setting-info">
+                                                <span class="setting-label" data-i18n="settings_console_label">Debug Console</span>
+                                                <span class="setting-desc" data-i18n="settings_console_desc">Access internal logs and real-time process output.</span>
+                                            </div>
+                                            <button class="btn-primary" id="btnOpenConsole" style="flex-shrink:0;" data-i18n="btn_open">Open</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="settings-section">
+                                    <h3 class="settings-section-title" data-i18n="settings_update_checker">Update Checker</h3>
+                                    <div class="settings-card">
+                                        <div class="setting-item">
+                                            <div class="setting-info">
+                                                <span class="setting-label" data-i18n="settings_check_mara">Check for Mara Injector</span>
+                                            </div>
+                                            <div class="toggle-switch">
+                                                <input type="checkbox" id="checkMaraUpdate" checked>
+                                                <span class="toggle-slider"></span>
+                                            </div>
+                                        </div>
+                                        <div class="setting-divider"></div>
+                                        <div class="setting-item">
+                                            <div class="setting-info">
+                                                <span class="setting-label" data-i18n="settings_check_dll">Check for Aegleseeker DLL</span>
+                                            </div>
+                                            <div class="toggle-switch">
+                                                <input type="checkbox" id="checkDllUpdate" checked>
+                                                <span class="toggle-slider"></span>
+                                            </div>
+                                        </div>
+                                        <div class="setting-divider"></div>
+                                        <div class="setting-item">
+                                            <div class="setting-info">
+                                                <span class="setting-label" data-i18n="settings_manage_versions">Manage Versions</span>
+                                                <span class="setting-desc" data-i18n="settings_manage_versions_desc">Allow switching between installed launcher versions.</span>
+                                            </div>
+                                            <div class="toggle-switch">
+                                                <input type="checkbox" id="manageVersionsToggle">
+                                                <span class="toggle-slider"></span>
+                                            </div>
+                                        </div>
+                                        <p class="field-info" data-i18n="settings_update_info" style="margin-top: 8px;">Toggle automatic updates for core components.</p>
+                                    </div>
+                                </div>
+
+                                <div class="settings-footer">
+                                    <button class="btn-primary" id="btnSaveSettingsAdv" data-i18n="settings_save">Save Changes</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Kill Confirmation Dialog -->
+    <div class="modal-root" id="killConfirmModal" style="--wails-draggable:no-drag">
+        <div class="modal-backdrop"></div>
+        <div class="modal-card modal-card--compact">
+            <div class="modal-top">
+                <h3 data-i18n="kill_title">Confirm Kill</h3>
+            </div>
+            <div class="modal-form">
+                <p class="dialog-body" data-i18n="kill_desc">Are you sure? Killing the game process can cause <strong>progress loss</strong>.</p>
+                <div class="field-actions">
+                    <button class="btn-danger" id="btnConfirmKill" data-i18n="kill_confirm">Kill Game</button>
+                    <button class="btn-outline" id="btnCancelKill" data-i18n="kill_cancel">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Detected Popup -->
+    <div class="modal-root" id="gameDetectedModal" style="--wails-draggable:no-drag">
+        <div class="modal-backdrop"></div>
+        <div class="modal-card modal-card--compact">
+            <div class="modal-top">
+                <h3 data-i18n="detected_title">Game Detected</h3>
+            </div>
+            <div class="modal-form">
+                <p class="dialog-body" data-i18n="detected_desc">Game process detected and ready to inject. But we recommend you to launch the game via the launcher.</p>
+                <div class="field-actions field-actions--col">
+                    <button class="btn-primary" id="btnRestartAndInject"><span data-i18n="detected_restart">↺ Restart and inject</span> <span class="tag-recommended" data-i18n="detected_recommended">Recommended</span></button>
+                    <button class="btn-outline" id="btnInjectAnyways" data-i18n="detected_inject_anyways">Inject anyways</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manual Inject Warning -->
+    <div class="modal-root" id="manualInjectModal" style="--wails-draggable:no-drag">
+        <div class="modal-backdrop"></div>
+        <div class="modal-card modal-card--compact">
+            <div class="modal-top">
+                <h3 data-i18n="warning_title">Note</h3>
+            </div>
+            <div class="modal-form">
+                <p class="dialog-body" data-i18n="warning_desc">Only click "inject" after the game already fully loaded to the main menu. Continue?</p>
+                <div class="field" style="margin-bottom: 20px;">
+                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; color: var(--muted); font-size: 0.85em; user-select: none;">
+                        <input type="checkbox" id="skipInjectWarning" style="accent-color: var(--primary);">
+                        <span data-i18n="warning_never_show">Never show this again</span>
+                    </label>
+                </div>
+                <div class="field-actions">
+                    <button class="btn-primary" id="btnContinueInject" data-i18n="warning_continue">Continue</button>
+                    <button class="btn-outline" id="btnWaitInject" data-i18n="warning_wait">Wait</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Process Not Found Modal -->
+    <div class="modal-root" id="processNotFoundModal" style="--wails-draggable:no-drag">
+        <div class="modal-backdrop"></div>
+        <div class="modal-card modal-card--compact">
+            <div class="modal-top">
+                <h3 data-i18n="process_error_title" style="color: #ff3333;">Error</h3>
+            </div>
+            <div class="modal-form">
+                <p class="dialog-body" data-i18n="process_error_desc">Minecraft process has been closed externally due to a crash or manual closing!<br>Do you want to try again?</p>
+                <div class="field-actions">
+                    <button class="btn-primary" id="btnRetryInject" data-i18n="btn_retry">Retry</button>
+                    <button class="btn-outline" id="btnCancelRetry" data-i18n="btn_cancel">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Invalid DLL Path Modal -->
+    <div class="modal-root" id="invalidDllModal" style="--wails-draggable:no-drag">
+        <div class="modal-backdrop"></div>
+        <div class="modal-card modal-card--compact">
+            <div class="modal-top">
+                <h3 data-i18n="dll_error_title" style="color: #ff3333;">Invalid DLL Path</h3>
+            </div>
+            <div class="modal-form">
+                <div class="dll-error-body">
+                    <svg class="dll-error-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ff3333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                        <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                    </svg>
+                    <p class="dialog-body" data-i18n="dll_error_desc">Invalid DLL path! Please set a valid DLL and try again.</p>
+                </div>
+                <div class="field-actions">
+                    <button class="btn-primary" id="btnDllErrorSettings" data-i18n="dll_error_settings">Settings</button>
+                    <button class="btn-outline" id="btnDllErrorRetry" data-i18n="dll_error_retry">Try Again</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Available Popup -->
+    <div class="modal-root" id="updateModal" style="--wails-draggable:no-drag">
+        <div class="modal-backdrop"></div>
+        <div class="modal-card modal-card--compact">
+            <div class="modal-top">
+                <h3 data-i18n="update_available">UPDATE AVAILABLE!</h3>
+            </div>
+            <div class="modal-form">
+                <p class="dialog-body" data-i18n="update_desc">A new version (<strong id="newVersionTag">v0.0.0</strong>) of the launcher is available. Do you want to update now?</p>
+                <div class="field-actions field-actions--col">
+                    <button class="btn-primary" id="btnUpdateNow" data-i18n="btn_update_now">Update now</button>
+                    <button class="btn-outline" id="btnUpdateLater" data-i18n="btn_update_later">Update later</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="skinview3d.bundle.js"></script>
+    <script src="renderer.js"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "$schema": "https://wails.io/schemas/config.v2.json",
+  "name": "arcaea-launcher",
+  "outputfilename": "ArcaeaLauncher",
+  "frontend:dir": "frontend",
+  "author": {
+    "name": "Arcaea Launcher",
+    "email": ""
+  }
+}
